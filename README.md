@@ -57,7 +57,7 @@ Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
 3. Provided two resolution paths:
 - Change Owner:
 ``ALTER DATABASE staging OWNER TO ivytigsjr;``
--Grant Privileges:
+- Grant Privileges:
 ``GRANT CONNECT ON DATABASE staging TO ivytigsjr;
 GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 4. Verified permissions via `\l` and pgAdmin UI.
