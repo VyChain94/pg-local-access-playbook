@@ -31,16 +31,17 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
 ### 🐞 Phase 1 — Service Recovery & Authentication
 
 1. Identified invalid connection type errors in `pg_hba.conf`.
+   
 2. Cleared template noise and applied minimal secure configuration:
 
    ```plaintext
    local   all             all                                     md5
    host    all             all             127.0.0.1/32            md5
    host    all             all             ::1/128                 md5
-Restarted PostgreSQL successfully with:
+3. Restarted PostgreSQL successfully with:
 
    `brew services restart postgresql@17`
-Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
+4. Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
 
 ### 🔐 Phase 2 — User Account Password Management
 1. Reset ivytigsjr user password via:
