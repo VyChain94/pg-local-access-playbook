@@ -3,11 +3,11 @@ PostgreSQL + pgAdmin Local User Access + Permission Management Playbook
 
 # PostgreSQL & pgAdmin Local User Access + Permission Management Playbook
 
-**Role:** Prod App Support Engineer  
+**Role:** Hybrid — DBA / Production Application Support Engineer 
 **System:** macOS  
 **Database:** PostgreSQL 17 (Homebrew)  
 **GUI:** pgAdmin 4  
-**Root Cause:** User account access, authentication misconfiguration, and ownership ambiguity leading to startup issues, connection errors.
+**Root Cause:** Authentication misconfiguration, port mismatch, and ownership ambiguity caused PostgreSQL service startup failures, connection errors, and unintended database visibility across roles.
 
 ---
 
@@ -57,10 +57,10 @@ PostgreSQL + pgAdmin Local User Access + Permission Management Playbook
 ### Phase 3 — Database Ownership & Access Control
 1. Identified staging database owned by postgres.
 2. Explained PostgreSQL cluster database visibility: all users see all databases they have privileges on.
-3. Provided two resolution paths:
-- Change Owner:
+3. Implement either of the two resolution paths:
+- Option 1 - Transfer Ownership:
 ``ALTER DATABASE staging OWNER TO ivytigsjr;``
-- Grant Privileges:
+- Option 2 - Adjust Privileges:
 ``GRANT CONNECT ON DATABASE staging TO ivytigsjr;
 GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 4. Verified permissions via `\l` and pgAdmin UI.
@@ -92,6 +92,10 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 `cp /opt/homebrew/var/postgresql@17/pg_hba.conf ~/pg_hba.conf.backup`
 - Always verify port settings in GUI tools like pgAdmin.
 
+- Separate ownership and privileges to avoid unintended visibility.
+
+- Document and version changes for quick rollback.
+
 ## 5. Troubleshooting Port Mismatch
 - Verify the actual port Postgres is running on:
 `lsof -i :5432`
@@ -115,14 +119,18 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 ##Final Status
 - ✅ PostgreSQL running cleanly with secure authentication.
 
-- ✅ pgAdmin connections established for both postgres and ivytigsjr users.
+- ✅ PostgreSQL service restored and stable.
 
-- ✅ Database staging visible and controllable via proper ownership/privileges.
+- ✅ Authentication and port configuration fixed.
+
+- ✅ Ownership and privileges properly enforced.
 
 - ✅ Full command history documented for escalation & future incident response.
 
-- Author: Ivy Tigs Jr | Production Application Support Engineer
-- Revision: 2.0
+- ✅ Both DBA and App Support functions were handled by a single engineer.
+
+- Author: Ivy Tigs Jr — Hybrid DBA / Production Application Support Engineer
+- Revision: 3.0
 - Date: 2025-10-25
-- Tags: `PostgreSQL` `pgAdmin` `Access Control` `Authentication` `Ownership` `Support Playbook`
+- Tags: `PostgreSQL` `pgAdmin` `DBA` `App Support` `Access Control` `Authentication` `Ownership` `Support Playbook` `Runbook`
 
