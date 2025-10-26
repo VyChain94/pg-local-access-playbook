@@ -114,7 +114,8 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 `password_encryption = scram-sha-256`
 - Consider SSL/TLS (hostssl) for external connections.
 - Set up replication if scaling is needed in the future.
-- Automate pg_hba.conf backups in deployment scripts.
+- Automated script that backs up pg_hba.conf and audits role privileges (\du, \l, etc.)
+- A Bash-based setup script that configures local PostgreSQL access for a dev team with secure defaults
 
 ##Final Status
 - ✅ PostgreSQL running cleanly with secure authentication.
