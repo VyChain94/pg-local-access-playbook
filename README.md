@@ -63,17 +63,17 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 4. Verified permissions via `\l` and pgAdmin UI.
 
 ## 🧰 3. Post-Resolution Commands Cheat Sheet
-List Databases:
+- List Databases:
 `\l`
-List Roles:
+- List Roles:
 `\du`
-Switch Databases:
+- Switch Databases:
 `\c staging`
-Create Database for Specific User:
+- Create Database for Specific User:
 `CREATE DATABASE mydb OWNER ivytigsjr;`
-Grant Access:
+- Grant Access:
 `GRANT ALL PRIVILEGES ON DATABASE mydb TO ivytigsjr;`
-Reset Password:
+- Reset Password:
 `ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';`
 ## 🧭 4. Best Practices for App Support Engineers
 🧼 Keep pg_hba.conf minimal and clean. Remove example/template noise.
