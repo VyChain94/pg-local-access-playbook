@@ -39,9 +39,8 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
    host    all             all             ::1/128                 md5
 Restarted PostgreSQL successfully with:
 
-bash
-Copy code
-brew services restart postgresql@17
+   ```plaintext
+   brew services restart postgresql@17
 Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
 
 🔐 Phase 2 — User Account Password Management
