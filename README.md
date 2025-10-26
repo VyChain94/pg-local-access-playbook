@@ -39,75 +39,43 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
    host    all             all             ::1/128                 md5
 Restarted PostgreSQL successfully with:
 
-   ```plaintext
-   brew services restart postgresql@17
+   `brew services restart postgresql@17`
 Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
 
-🔐 Phase 2 — User Account Password Management
-Reset ivytigsjr user password via:
+### 🔐 Phase 2 — User Account Password Management
+1. Reset ivytigsjr user password via:
 
-sql
-Copy code
-ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';
-Confirmed login with:
+`ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';`
+2. Confirmed login with:
 
-bash
-Copy code
-psql -U ivytigsjr -h 127.0.0.1 -d postgres
-Updated pgAdmin connection properties to correct port and credentials.
+`psql -U ivytigsjr -h 127.0.0.1 -d postgres`
+3. Updated pgAdmin connection properties to correct port and credentials.
 
-🏗 Phase 3 — Database Ownership & Access Control
-Identified staging database owned by postgres.
+### 🏗 Phase 3 — Database Ownership & Access Control
+1. Identified staging database owned by postgres.
+2. Explained PostgreSQL cluster database visibility: all users see all databases they have privileges on.
+3. Provided two resolution paths:
+- Change Owner:
+``ALTER DATABASE staging OWNER TO ivytigsjr;``
+-Grant Privileges:
+``GRANT CONNECT ON DATABASE staging TO ivytigsjr;
+GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
+4. Verified permissions via `\l` and pgAdmin UI.
 
-Explained PostgreSQL cluster database visibility: all users see all databases they have privileges on.
-
-Provided two resolution paths:
-
-Change Owner:
-
-sql
-Copy code
-ALTER DATABASE staging OWNER TO ivytigsjr;
-Grant Privileges:
-
-sql
-Copy code
-GRANT CONNECT ON DATABASE staging TO ivytigsjr;
-GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;
-Verified permissions via \l and pgAdmin UI.
-
-🧰 3. Post-Resolution Commands Cheat Sheet
+## 🧰 3. Post-Resolution Commands Cheat Sheet
 List Databases:
-
-sql
-Copy code
-\l
+`\l`
 List Roles:
-
-sql
-Copy code
-\du
+`\du`
 Switch Databases:
-
-sql
-Copy code
-\c staging
+`\c staging`
 Create Database for Specific User:
-
-sql
-Copy code
-CREATE DATABASE mydb OWNER ivytigsjr;
+`CREATE DATABASE mydb OWNER ivytigsjr;`
 Grant Access:
-
-sql
-Copy code
-GRANT ALL PRIVILEGES ON DATABASE mydb TO ivytigsjr;
+`GRANT ALL PRIVILEGES ON DATABASE mydb TO ivytigsjr;`
 Reset Password:
-
-sql
-Copy code
-ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';
-🧭 4. Best Practices for App Support Engineers
+`ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';`
+## 🧭 4. Best Practices for App Support Engineers
 🧼 Keep pg_hba.conf minimal and clean. Remove example/template noise.
 
 🔐 Use md5 or scram-sha-256 auth; avoid trust mode.
