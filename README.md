@@ -1,17 +1,17 @@
 # pg-local-access-playbook
-PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
+PostgreSQL + pgAdmin Local User Access + Permission Management Playbook
 
-# 🐘 PostgreSQL & pgAdmin Local User Access + Permission Management Playbook
+# PostgreSQL & pgAdmin Local User Access + Permission Management Playbook
 
 **Role:** Prod App Support Engineer  
 **System:** macOS  
 **Database:** PostgreSQL 17 (Homebrew)  
 **GUI:** pgAdmin 4  
-**Root Cause:** User account access, authentication misconfiguration, and ownership ambiguity leading to startup issues, connection errors, and unclear database visibility between roles.
+**Root Cause:** User account access, authentication misconfiguration, and ownership ambiguity leading to startup issues, connection errors.
 
 ---
 
-## 🧭 1. Symptom Overview
+## 1. Symptom Overview
 
 - `brew services` showed service startup failures.  
 - `psql` returned `connection refused` errors.  
@@ -26,9 +26,9 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
 
 ---
 
-## 🧰 2. Resolution Timeline
+## 2. Resolution Timeline
 
-### 🐞 Phase 1 — Service Recovery & Authentication
+### Phase 1 — Service Recovery & Authentication
 
 1. Identified invalid connection type errors in `pg_hba.conf`.
    
@@ -43,7 +43,7 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
    `brew services restart postgresql@17`
 4. Verified interactive psql access and pgAdmin connection at 127.0.0.1:5432.
 
-### 🔐 Phase 2 — User Account Password Management
+### Phase 2 — User Account Password Management
 1. Reset ivytigsjr user password via:
 
 `ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';`
@@ -52,7 +52,7 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
 `psql -U ivytigsjr -h 127.0.0.1 -d postgres`
 3. Updated pgAdmin connection properties to correct port and credentials.
 
-### 🏗 Phase 3 — Database Ownership & Access Control
+### Phase 3 — Database Ownership & Access Control
 1. Identified staging database owned by postgres.
 2. Explained PostgreSQL cluster database visibility: all users see all databases they have privileges on.
 3. Provided two resolution paths:
@@ -63,7 +63,7 @@ PostgreSQL &amp; pgAdmin Local User Access + Permission Management Playbook
 GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 4. Verified permissions via `\l` and pgAdmin UI.
 
-## 🧰 3. Post-Resolution Commands Cheat Sheet
+## 3. Post-Resolution Commands Cheat Sheet
 - List Databases:
 `\l`
 - List Roles:
@@ -76,65 +76,51 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 `GRANT ALL PRIVILEGES ON DATABASE mydb TO ivytigsjr;`
 - Reset Password:
 `ALTER ROLE ivytigsjr WITH PASSWORD 'NewStrongPassword';`
-## 🧭 4. Best Practices for App Support Engineers
-🧼 Keep pg_hba.conf minimal and clean. Remove example/template noise.
 
-🔐 Use md5 or scram-sha-256 auth; avoid trust mode.
+## 4. Best Practices for App Support Engineers
+- Keep pg_hba.conf minimal and clean. Remove example/template noise.
 
-🧑🏽‍💻 Create non-superuser accounts for application access.
+- Use md5 or scram-sha-256 auth; avoid trust mode.
 
-🏗 Separate database ownership and privileges for cleaner access control.
+- Create non-superuser accounts for application access.
 
-🛡 Backup working configs:
+- Separate database ownership and privileges for cleaner access control.
 
-bash
-Copy code
-cp /opt/homebrew/var/postgresql@17/pg_hba.conf ~/pg_hba.conf.backup
-🧭 Always verify port settings in GUI tools like pgAdmin.
+- Backup working configs:
+`cp /opt/homebrew/var/postgresql@17/pg_hba.conf ~/pg_hba.conf.backup`
+- Always verify port settings in GUI tools like pgAdmin.
 
-🧭 5. Troubleshooting Port Mismatch
-Verify the actual port Postgres is running on:
+## 5. Troubleshooting Port Mismatch
+- Verify the actual port Postgres is running on:
+`lsof -i :5432`
+- If pgAdmin attempts port 5433, correct the Connection > Port field in the server settings.
+- Default port: 5432.
 
-bash
-Copy code
-lsof -i :5432
-If pgAdmin attempts port 5433, correct the Connection > Port field in the server settings.
+## 6. Role, Database & Cluster Visibility Quick Reference
+| Concept | Scope | Notes |
+| :------- | :------: | -------: |
+| Role (User) | Cluster-wide  | Can access any DB with privileges  |
+| Database  | Cluster-wide  | Owned by a role but visible to others if privileges exist  |
+| pg_hba.conf rules | Cluster-level access control | Determines how users authenticate |
 
-Default port: 5432.
+## 7. Future Enhancements / Production Considerations
+- Enable scram-sha-256 for stronger password hashing:
+`password_encryption = scram-sha-256`
+- Consider SSL/TLS (hostssl) for external connections.
+- Set up replication if scaling is needed in the future.
+- Automate pg_hba.conf backups in deployment scripts.
 
-🧭 6. Role, Database & Cluster Visibility Quick Reference
-Concept	Scope	Notes
-Role (User)	Cluster-wide	Can access any DB with privileges
-Database	Cluster-wide	Owned by a role but visible to others if privileges exist
-pg_hba.conf rules	Cluster-level access control	Determines how users authenticate
+##Final Status
+- ✅ PostgreSQL running cleanly with secure authentication.
 
-🧭 7. Future Enhancements / Production Considerations
-✅ Enable scram-sha-256 for stronger password hashing:
+- ✅ pgAdmin connections established for both postgres and ivytigsjr users.
 
-conf
-Copy code
-password_encryption = scram-sha-256
-🔐 Consider SSL/TLS (hostssl) for external connections.
+- ✅ Database staging visible and controllable via proper ownership/privileges.
 
-🧭 Set up replication if scaling is needed in the future.
+- ✅ Full command history documented for escalation & future incident response.
 
-📦 Automate pg_hba.conf backups in deployment scripts.
-
-🏁 Final Status
-✅ PostgreSQL running cleanly with secure authentication.
-
-✅ pgAdmin connections established for both postgres and ivytigsjr users.
-
-✅ Database staging visible and controllable via proper ownership/privileges.
-
-✅ Full command history documented for escalation & future incident response.
-
-Author: Prod App Support Engineer
+Author: Ivy Tigs Jr | Production Application Support Engineer
 Revision: 2.0
 Date: 2025-10-25
-Tags: PostgreSQL pgAdmin Access Control Authentication Ownership Support Playbook
+Tags: `PostgreSQL` `pgAdmin` `Access Control` `Authentication` `Ownership` `Support Playbook`
 
-pgsql
-Copy code
-
-✅ You can paste this directly into a `README.md` or `playbook.md` file on GitHub — all he
