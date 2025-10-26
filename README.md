@@ -119,8 +119,8 @@ GRANT ALL PRIVILEGES ON DATABASE staging TO ivytigsjr;``
 
 - ✅ Full command history documented for escalation & future incident response.
 
-Author: Ivy Tigs Jr | Production Application Support Engineer
-Revision: 2.0
-Date: 2025-10-25
-Tags: `PostgreSQL` `pgAdmin` `Access Control` `Authentication` `Ownership` `Support Playbook`
+- Author: Ivy Tigs Jr | Production Application Support Engineer
+- Revision: 2.0
+- Date: 2025-10-25
+- Tags: `PostgreSQL` `pgAdmin` `Access Control` `Authentication` `Ownership` `Support Playbook`
 
